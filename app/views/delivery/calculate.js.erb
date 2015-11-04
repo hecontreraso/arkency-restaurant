@@ -1,0 +1,7 @@
+if(<%= success %>){
+	text = 'You are currently located at <%= (distance).round(2) %> kilometers from us. You will be charged with <%= rate %> for the delivery. Enjoy!';
+}
+else {
+	text = '<%= error %>';
+}
+$('.response').text(text);
