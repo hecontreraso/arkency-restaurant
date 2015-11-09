@@ -3,7 +3,7 @@ if(<%= success %>){
 	loadMap();
 }
 else if('<%= error %>' == 'incorrect_address') {
-	text = "We are unable to find your address.";
+	text = "We are unable to find your address";
 	initMap(); //Clear the map
 }
 else if('<%= error %>' == 'distance_exceeded'){
@@ -14,13 +14,12 @@ else if('<%= error %>' == 'distance_exceeded'){
 $('.response').text(text);
 
 function loadMap(){
-	//Clear the map
-	initMap();
+	initMap(); //Clear the map
 
 	// Create a position object with the entered address
 	var customerPosition = {
-		lat: <%= coordinates[0] %>,
-		lng: <%= coordinates[1] %>
+		lat: <%= coordinates ? coordinates[0] : 0 %>,
+		lng: <%= coordinates ? coordinates[1] : 0 %>
 	};
 
 	// distanceType is the value of the radio button

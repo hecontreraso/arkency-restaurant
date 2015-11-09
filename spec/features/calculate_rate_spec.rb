@@ -25,7 +25,7 @@ RSpec.feature 'get tasks rates', js: true do
         fill_in 'address', with: 'incorrectincorrectincorrectincorrect'
       end
       click_button "I'm hungry!!"
-      expect(find('.response')).to have_content('We are unable to find your address!')
+      expect(find('.response')).to have_content('We are unable to find your address')
     end
   end
 

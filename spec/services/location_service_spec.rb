@@ -7,9 +7,8 @@ RSpec.describe LocationService do
     	ENV['RESTAURANT_LATITUDE'] = '37.7624307'
     	ENV['RESTAURANT_LONGITUDE'] = '-122.4662728'
 
-    	distance = LocationService.calculate_distance('San Francisco, 750 Howard Street, California, Estados Unidos')
+    	distance = LocationService.calculate_distance('San Francisco, 750 Howard Street, California, Estados Unidos', 'lineal')
     	expect(distance.round(2)).to eq(6.15)
-
     end
   end
 
