@@ -5,3 +5,22 @@ else {
 	text = '<%= error %>';
 }
 $('.response').text(text);
+
+// Add a marker with the entered address
+var address = new google.maps.LatLng(<%= coordinates[0] %>, <%= coordinates[1] %>);
+var customerPositionMarker = new google.maps.Marker({
+  position: address, 
+  map: map,
+  title: 'Your location'
+});
+
+// Zoom out the map to show the two points
+var bounds = new google.maps.LatLngBounds();
+bounds.extend(customerPositionMarker.getPosition());
+bounds.extend(restaurantPositionMarker.getPosition());
+
+map.fitBounds(bounds);
+
+// console.log('customerPosition.getPosition(): '+customerPosition.getPosition());
+// console.log('restaurantPosition: '+[restaurantPosition.lat,restaurantPosition.lng]);
+	

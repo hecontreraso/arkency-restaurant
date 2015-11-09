@@ -9,8 +9,12 @@
 				<div class="panel panel-default">
 				  <div class="panel-body">
 				  	<%= image_tag 'logo.png', class: 'header-logo' %>
-				  	<%= form_tag(root_path, { remote: true, class: 'form-group' }) do %>
+				  	<%= form_tag(root_path, { remote: true, class: 'form-group', id: 'form-address' }) do %>
 				  		<br>
+							<label>Distance between points</label>
+							<%= radio_button_tag 'distanceType', 'lineal' %>
+							<label>Route distance</label>
+							<%= radio_button_tag 'distanceType', 'route' %>
 				  		<div class="input-group">
 				  			<%= text_field_tag(:address, nil,
 				  				{ placeholder: 'Tell us your actual location',
@@ -25,14 +29,45 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div id="googleMap" style="width:500px;height:380px;"></div>
+		</div>
 	</div>
 </section>
+
+
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 <script type="text/javascript">
+	var map;
+	var restaurantPosition = {
+		lat: <%= ENV['RESTAURANT_LATITUDE'] %>,
+		lng: <%= ENV['RESTAURANT_LONGITUDE'] %>
+	};
+	var restaurantPositionMarker;
+
+	// initialize the autofill functionality in the form
 	function initialize() {
     var input = document.getElementById('address');
-    new google.maps.places.Autocomplete(input, {});
+    new google.maps.places.Autocomplete(input, {
+    	componentRestrictions: {country: "uk"}
+    });
 	}
-	             
 	google.maps.event.addDomListener(window, 'load', initialize);
+
+	function initMap() {
+	  // Create a map object and specify the DOM element for display.
+	  map = new google.maps.Map(document.getElementById('googleMap'), {
+	    center: restaurantPosition,
+	    zoom: 12,
+	  });
+		// Create a marker with the current position of restaurant.
+	  restaurantPositionMarker = new google.maps.Marker({
+	    map: map,
+	    position: restaurantPosition,
+	    title: 'Our location'
+	  });
+	}
+	google.maps.event.addDomListener(window, 'load', initMap);
+
+
 </script>
