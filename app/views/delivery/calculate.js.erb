@@ -1,26 +1,65 @@
 if(<%= success %>){
 	text = 'You are currently located at <%= (distance).round(2) %> kilometers from us. You will be charged with <%= rate %> for the delivery. Enjoy!';
+	loadMap();
 }
-else {
-	text = '<%= error %>';
+else if('<%= error %>' == 'incorrect_address') {
+	text = "We are unable to find your address.";
+	initMap(); //Clear the map
 }
+else if('<%= error %>' == 'distance_exceeded'){
+	text = 'You are located at <%= (distance).round(2) %> kilometers from us. Sorry, we don\'t serve to this distance';
+	initMap(); //Clear the map
+}
+
 $('.response').text(text);
 
-// Add a marker with the entered address
-var address = new google.maps.LatLng(<%= coordinates[0] %>, <%= coordinates[1] %>);
-var customerPositionMarker = new google.maps.Marker({
-  position: address, 
-  map: map,
-  title: 'Your location'
-});
+function loadMap(){
+	//Clear the map
+	initMap();
 
-// Zoom out the map to show the two points
-var bounds = new google.maps.LatLngBounds();
-bounds.extend(customerPositionMarker.getPosition());
-bounds.extend(restaurantPositionMarker.getPosition());
+	// Create a position object with the entered address
+	var customerPosition = {
+		lat: <%= coordinates[0] %>,
+		lng: <%= coordinates[1] %>
+	};
 
-map.fitBounds(bounds);
+	// distanceType is the value of the radio button
+	var distanceType = $('[name=distanceType]:checked').val();
 
-// console.log('customerPosition.getPosition(): '+customerPosition.getPosition());
-// console.log('restaurantPosition: '+[restaurantPosition.lat,restaurantPosition.lng]);
-	
+	if(distanceType == 'lineal'){
+		// Add a marker with the entered address
+		var customerPositionMarker = new google.maps.Marker({
+		  position: customerPosition, 
+		  map: map,
+		  title: 'Your location'
+		});
+		// Zoom out the map to show the two points
+		var bounds = new google.maps.LatLngBounds();
+		bounds.extend(customerPositionMarker.getPosition());
+		bounds.extend(restaurantPositionMarker.getPosition());
+
+		map.fitBounds(bounds);
+	}
+	if(distanceType == 'route'){
+		var directionsDisplay = new google.maps.DirectionsRenderer({
+		  map: map
+		});
+
+		// Set destination, origin and travel mode.
+		var request = {
+		  destination: customerPosition,
+		  origin: restaurantPosition,
+		  travelMode: google.maps.TravelMode.DRIVING
+		};
+
+		// Pass the directions request to the directions service.
+		var directionsService = new google.maps.DirectionsService();
+		directionsService.route(request, function(response, status) {
+			objeto = response;
+		  if (status == google.maps.DirectionsStatus.OK) {
+		    // Display the route on the map.
+		    directionsDisplay.setDirections(response);
+		  }
+		});
+	}
+}

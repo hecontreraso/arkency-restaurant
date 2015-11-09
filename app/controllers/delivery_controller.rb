@@ -4,16 +4,19 @@ class DeliveryController < ApplicationController
 	def calculate
 		success = true
 		error = 'none'
-		distance = LocationService.calculate_distance(delivery_params[:address])
+		distance = LocationService.calculate_distance(
+			delivery_params[:address],
+			delivery_params[:distanceType]
+		)
 		coordinates = Geocoder.coordinates(delivery_params[:address])
 
 		if distance.nan?
-	  	error = "We are unable to find your address!"
+	  	error = "incorrect_address"
 			success = false
 		else
 			rate =  LocationService.calculate_rate(distance)
 			if rate.nil?
-		  	error = 'You are too far away from us!'
+		  	error = 'distance_exceeded'
 				success = false
 			end
 		end
@@ -35,6 +38,6 @@ class DeliveryController < ApplicationController
 	private
 
 		def delivery_params
-			params.permit(:address)
+			params.permit(:address, :distanceType)
 		end
 end

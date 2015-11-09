@@ -12,13 +12,16 @@
 				  	<%= form_tag(root_path, { remote: true, class: 'form-group', id: 'form-address' }) do %>
 				  		<br>
 							<label>Distance between points</label>
-							<%= radio_button_tag 'distanceType', 'lineal' %>
+							<%= radio_button_tag 'distanceType', 'lineal', true %>
 							<label>Route distance</label>
-							<%= radio_button_tag 'distanceType', 'route' %>
+							<%= radio_button_tag 'distanceType', 'route', false %>
 				  		<div class="input-group">
 				  			<%= text_field_tag(:address, nil,
-				  				{ placeholder: 'Tell us your actual location',
-				  					class: 'form-control' }) %>
+				  				{ 
+				  					placeholder: 'Tell us your actual location',
+				  					class: 'form-control',
+			  						required: 'required'
+		  						}) %>
   							<span class="input-group-btn">
 					  			<%= button_tag "I'm hungry!!", { class: 'btn btn-success' } %>
   							</span>
@@ -30,11 +33,10 @@
 			</div>
 		</div>
 		<div class="row">
-			<div id="googleMap" style="width:500px;height:380px;"></div>
+			<div id="googleMap"></div>
 		</div>
 	</div>
 </section>
-
 
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 <script type="text/javascript">
@@ -46,13 +48,13 @@
 	var restaurantPositionMarker;
 
 	// initialize the autofill functionality in the form
-	function initialize() {
+	function initializeAutocomplete() {
     var input = document.getElementById('address');
     new google.maps.places.Autocomplete(input, {
     	componentRestrictions: {country: "uk"}
     });
 	}
-	google.maps.event.addDomListener(window, 'load', initialize);
+	google.maps.event.addDomListener(window, 'load', initializeAutocomplete);
 
 	function initMap() {
 	  // Create a map object and specify the DOM element for display.
@@ -68,6 +70,4 @@
 	  });
 	}
 	google.maps.event.addDomListener(window, 'load', initMap);
-
-
 </script>

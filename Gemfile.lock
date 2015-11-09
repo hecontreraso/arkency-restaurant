@@ -97,6 +97,9 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     http_parser.rb (0.6.0)
+    httparty (0.13.5)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     jbuilder (2.3.2)
       activesupport (>= 3.0.0, < 5)
@@ -119,6 +122,7 @@ GEM
     mini_portile (0.6.2)
     minitest (5.8.2)
     multi_json (1.11.2)
+    multi_xml (0.5.5)
     nenv (0.2.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
@@ -243,6 +247,7 @@ DEPENDENCIES
   geocoder
   guard-livereload (~> 2.4)
   guard-rspec
+  httparty
   jbuilder (~> 2.0)
   jquery-rails
   rails (= 4.2.3)
